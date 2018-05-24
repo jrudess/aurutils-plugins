@@ -1,0 +1,28 @@
+#!/bin/bash
+readonly PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+
+source /usr/share/makepkg/util/message.sh || exit
+
+if [[ -t 2 && ! -o xtrace ]]; then
+    colorize
+fi
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+# get new devel versions
+cd "$tmp"
+echo "Package: Current -> New" > updates
+if [[ $(aur vercmp-devel "$@" | tee -a updates) ]]; then
+    msg2 "$(wc -l updates) update(s) found"
+    printf "\n$(column -t updates)\n\n"
+    read -r -p "Update? [y/N] " response
+    case "$response" in
+        [yY]|[yY][eE][sS])
+            cut -d : -f1 updates | xargs -I {} aur sync --no-ver "$@" {}
+            ;;
+    esac
+else
+    msg2 "No updates found"
+fi
+
