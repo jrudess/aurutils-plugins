@@ -14,7 +14,7 @@ trap 'rm -rf "$tmp"' EXIT
 cd "$tmp"
 echo "Package: Current -> New" > updates
 if [[ $(aur vercmp-devel "$@" | tee -a updates) ]]; then
-    msg2 "$(wc -l updates) update(s) found"
+    msg2 "$(wc -l updates) found"
     printf "\n$(column -t updates)\n\n"
     read -r -p "Update? [y/N] " response
     case "$response" in
