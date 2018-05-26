@@ -13,11 +13,11 @@ trap 'rm -rf "$tmp"' EXIT
 # get new devel versions
 cd "$tmp"
 if [[ $(aur vercmp-devel "$@" | tee -a updates) ]]; then
-    printf "\n$(column -t updates)\n\n"
-    read -r -p "$(wc -l updates) found. Proceed? [y/N] " response
+    printf "\n$(column -t updates)\n\n$(wc -l updates) found.  "
+    read -r -p "Proceed? [y/N] " response
     case "$response" in
         [yY]|[yY][eE][sS])
-            cut -d : -f1 | xargs -I {} aur sync --no-ver-shallow "$@" {}
+            cut -d : -f1 updates | xargs -I {} aur sync --no-ver-shallow "$@" {}
             ;;
     esac
 else
