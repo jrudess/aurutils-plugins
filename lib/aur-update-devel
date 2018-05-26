@@ -19,7 +19,7 @@ if [[ $(aur vercmp-devel "$@" | tee -a updates) ]]; then
     read -r -p "Update? [y/N] " response
     case "$response" in
         [yY]|[yY][eE][sS])
-            cut -d : -f1 updates | xargs -I {} aur sync --no-ver "$@" {}
+            cut -d : -f1 updates | xargs -I {} aur sync --no-ver-shallow "$@" {}
             ;;
     esac
 else
