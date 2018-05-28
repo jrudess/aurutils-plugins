@@ -1,0 +1,39 @@
+#!/bin/bash
+readonly PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+
+# TODO: reference function in aur-sync directly?
+conf_file_repo() {
+    awk -F'= ' '
+        $1 ~ /^\[.+\]$/ {
+            repo = substr($1, 2, length($1)-2)
+        }
+        $1 ~ /^Server/ && $2 ~ /^file:/ {
+            printf("%s\n%s\n", repo, $2)
+        }'
+}
+
+source /usr/share/makepkg/util/message.sh || exit
+
+if [[ -t 2 && ! -o xtrace ]]; then
+    colorize
+fi
+
+# TODO: What is $AUR_REPO check in aur-sync
+mapfile -t conf < <(pacconf | conf_file_repo)
+
+case ${#conf[@]} in
+    0)
+        error "$argv0: no file:// repository found"
+        exit 2 ;;
+    [1|3|5|7|9])
+        error "$argv0: unexpected number repos"
+        exit 2 ;;
+    *)
+        index=0;
+        while [ $index -lt ${#conf[@]} ]
+        do
+            aur sync -u -d ${conf[$index]}
+            let "index=index+2"
+        done
+esac
+
