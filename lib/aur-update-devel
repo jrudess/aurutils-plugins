@@ -17,7 +17,10 @@ if [[ $(aur vercmp-devel "$@" | tee updates) ]]; then
     read -r -p "Proceed? [y/N] " response
     case "$response" in
         [yY]|[yY][eE][sS])
-            cut -d : -f1 updates | xargs -I {} aur sync --no-ver-shallow "$@" {}
+            # If optional build dependences are not installed, then --noconfirm
+            # is required, or this command will terminate at the y/N prompt for
+            # installing the dependency
+            cut -d : -f1 updates | aur sync --no-ver-shallow "$@" --noconfirm -
             ;;
     esac
 else
