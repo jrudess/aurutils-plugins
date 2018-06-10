@@ -32,7 +32,7 @@ case sz in
         index=0
         while [ $index -lt $sz ]
         do
-            aur vercmp -d ${conf[$index]} | cut -d : -f1 | aur sync -d ${conf[$index]} "$@" -
+            aur sync -d ${conf[$index]} "$@"
             let "index=index+2"
         done
 esac

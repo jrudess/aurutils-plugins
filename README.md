@@ -1,4 +1,4 @@
 # aurutils-plugins
 
-* sync-all - loops through all local repositories and syncs aur packages but does not install
+* sync-all - Same as 'sync' but the command is run for all local repos
 * update-devel - Checks for new repo-commits and pulls changes even if pkgver has not changed
