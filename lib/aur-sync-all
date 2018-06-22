@@ -1,24 +1,13 @@
 #!/bin/bash
 readonly PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 
-# TODO: reference function in aur-sync directly?
-conf_file_repo() {
-    awk -F'= ' '
-        $1 ~ /^\[.+\]$/ {
-            repo = substr($1, 2, length($1)-2)
-        }
-        $1 ~ /^Server/ && $2 ~ /^file:/ {
-            printf("%s\n%s\n", repo, $2)
-        }'
-}
-
 source /usr/share/makepkg/util/message.sh || exit
 
 if [[ -t 2 && ! -o xtrace ]]; then
     colorize
 fi
 
-mapfile -t conf < <(pacconf | conf_file_repo)
+mapfile -t conf < <(aur sync --repo-list)
 
 let "sz = ${#conf[@]}"
 case sz in
