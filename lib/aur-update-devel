@@ -20,7 +20,8 @@ if [[ $(aur vercmp-devel "$@" | tee updates) ]]; then
             # If build dependences are not installed, then --noconfirm is
             # required, or the command will terminate at the y/N prompt for
             # installing the dependency
-            cut -d: -f1 updates | aur sync --no-ver-shallow --noconfirm "$@" -
+            cut -d: -f1 updates > vcs.txt
+            xargs -a vcs.txt aur sync --no-ver-shallow --noconfirm "$@"
             ;;
     esac
 else
