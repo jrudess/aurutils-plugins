@@ -7,7 +7,7 @@ if [[ -t 2 && ! -o xtrace ]]; then
     colorize
 fi
 
-mapfile -t conf < <(aur sync --repo-list)
+mapfile -t conf < <(aur repo --repo-list)
 
 let "sz = ${#conf[@]}"
 case sz in
