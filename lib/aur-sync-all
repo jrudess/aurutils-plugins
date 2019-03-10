@@ -7,13 +7,8 @@ if [[ -t 2 && ! -o xtrace ]]; then
     colorize
 fi
 
-mapfile -t conf < <(aur repo --repo-list)
-
-let "sz = ${#conf[@]}"
-index=0
-while [ $index -lt $sz ]
-do
-    aur sync -d ${conf[$index]} "$@"
-    index=$((index+1))
+aur repo --repo-list | while read -r; do
+    name=$(basename "$REPLY" .db)
+    aur sync -d $name "$@"
 done
 
