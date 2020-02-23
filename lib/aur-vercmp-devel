@@ -1,0 +1,18 @@
+#!/bin/bash
+readonly XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+readonly AURDEST=${AURDEST:-$XDG_CACHE_HOME/aurutils/sync}
+
+tmp=$(mktemp \-d)
+trap 'rm -rf "$tmp"' EXIT
+
+if cd "$AURDEST"; then
+    aur repo --list "$@" \
+        | grep -E ".*-(cvs|svn|git|hg|bzr|darcs)" \
+        | tee "$tmp"/db \
+        | cut -f1 \
+        | xargs -r aur srcver >"$tmp"/new || exit
+
+    if [[ -s $tmp/new ]]; then
+       aur vercmp -p "$tmp"/new < "$tmp"/db
+    fi
+ fi
