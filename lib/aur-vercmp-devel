@@ -5,7 +5,7 @@ readonly AURDEST=${AURDEST:-$XDG_CACHE_HOME/aurutils/sync}
 readonly AURVCS=${AURVCS:-".*-(cvs|svn|git|hg|bzr|darcs)"}
 
 tmp=$(mktemp -d)
-trap 'rm -rf "$tmp"' EXIT
+trap 'rm -rf -- "$tmp"' EXIT
 
 if cd "$AURDEST"; then
     aur repo --list "$@" \

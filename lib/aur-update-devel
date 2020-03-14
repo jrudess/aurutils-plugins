@@ -8,7 +8,7 @@ if [[ -t 2 && ! -o xtrace ]]; then
 fi
 
 tmp=$(mktemp -d)
-trap 'rm -rf "$tmp"' EXIT
+trap 'rm -rf -- "$tmp"' EXIT
 
 # upgrade vcs packages to latest commits
 cd "$tmp"
