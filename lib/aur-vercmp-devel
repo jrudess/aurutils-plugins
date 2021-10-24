@@ -17,4 +17,4 @@ if cd "$AURDEST"; then
     if [[ -s $tmp/new ]]; then
        aur vercmp -p "$tmp"/new < "$tmp"/db
     fi
- fi
+fi
