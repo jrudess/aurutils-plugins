@@ -7,7 +7,7 @@ if [[ -t 2 && ! -o xtrace ]]; then
     colorize
 fi
 
-aur repo --repo-list | while read -r; do
+aur repo --list-repo | while read -r; do
     name=$(basename "$REPLY" .db)
     aur sync -d $name "$@"
 done
